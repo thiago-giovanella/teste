@@ -1,0 +1,472 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Fink.AI - Visão Geral</title>
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Inter:wght@400;500;600;700&display=swap" rel="stylesheet" />
+  <style>
+    :root {
+      --bg: #f6f8fc;
+      --card: #f9f9ff;
+      --text: #1c1c1c;
+      --muted: #7a7a7a;
+      --blue: #2f7cff;
+      --light-blue: #e8f1ff;
+      --red: #ff4a3d;
+      --border: #e3e6ef;
+      --shadow: 0 2px 0 rgba(0, 0, 0, 0.04);
+      --radius: 16px;
+    }
+
+    * {
+      box-sizing: border-box;
+      margin: 0;
+      padding: 0;
+      font-family: "Inter", sans-serif;
+    }
+
+    body {
+      background: var(--bg);
+      color: var(--text);
+    }
+
+    .topbar {
+      background: #fff;
+      border-bottom: 1px solid #eef0f6;
+      padding: 18px 32px;
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+    }
+
+    .logo {
+      font-weight: 700;
+      color: #1f55ff;
+      font-size: 22px;
+    }
+
+    .avatar {
+      width: 34px;
+      height: 34px;
+      border-radius: 50%;
+      background: #e6e6e6;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .avatar svg {
+      width: 18px;
+      height: 18px;
+      fill: #555;
+    }
+
+    .tabs {
+      background: #fff;
+      padding: 0 32px 12px 32px;
+      border-bottom: 1px solid #eef0f6;
+      display: flex;
+      gap: 22px;
+      font-size: 14px;
+      color: var(--muted);
+    }
+
+    .tabs span {
+      position: relative;
+      padding-bottom: 10px;
+      cursor: default;
+    }
+
+    .tabs .active {
+      color: #2a66ff;
+      font-weight: 600;
+    }
+
+    .tabs .active::after {
+      content: "";
+      position: absolute;
+      left: 0;
+      bottom: 0;
+      height: 3px;
+      width: 20px;
+      border-radius: 999px;
+      background: #2a66ff;
+    }
+
+    .container {
+      padding: 18px 24px 30px;
+      display: grid;
+      grid-template-columns: 1fr 2.2fr 1.6fr;
+      gap: 18px;
+    }
+
+    .stack {
+      display: flex;
+      flex-direction: column;
+      gap: 18px;
+    }
+
+    .card {
+      background: var(--card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius);
+      padding: 18px;
+      box-shadow: var(--shadow);
+    }
+
+    .card h3 {
+      font-size: 14px;
+      font-weight: 600;
+      margin-bottom: 6px;
+    }
+
+    .muted {
+      color: var(--muted);
+      font-size: 12px;
+    }
+
+    .metric {
+      font-size: 22px;
+      font-weight: 700;
+      margin: 12px 0 8px;
+    }
+
+    .metric.negative {
+      color: #111;
+    }
+
+    .chip {
+      font-size: 11px;
+      font-weight: 600;
+      padding: 2px 8px;
+      border-radius: 999px;
+      display: inline-flex;
+    }
+
+    .chip.blue {
+      background: var(--light-blue);
+      color: #2661ff;
+    }
+
+    .chip.red {
+      background: #ffe9e7;
+      color: var(--red);
+    }
+
+    .row {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      font-size: 12px;
+      margin-top: 8px;
+      color: #555;
+    }
+
+    .icon-circle {
+      width: 36px;
+      height: 36px;
+      border-radius: 50%;
+      background: #dfe9ff;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+    }
+
+    .icon-circle svg {
+      width: 18px;
+      height: 18px;
+      fill: #2a66ff;
+    }
+
+    .period-header {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-bottom: 8px;
+    }
+
+    .period-title {
+      display: flex;
+      align-items: center;
+      gap: 12px;
+    }
+
+    .chart {
+      height: 220px;
+      background: linear-gradient(#f7f7fd, #f7f7fd);
+      border-radius: 12px;
+      position: relative;
+    }
+
+    .chart .dot {
+      position: absolute;
+      left: 52px;
+      top: 95px;
+      width: 6px;
+      height: 6px;
+      border-radius: 50%;
+      background: var(--red);
+    }
+
+    .chart-lines {
+      position: absolute;
+      inset: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+    }
+
+    .chart-lines span {
+      height: 1px;
+      background: #eceef7;
+    }
+
+    .chart-labels {
+      position: absolute;
+      inset: 16px 18px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 11px;
+      color: #a0a5b4;
+    }
+
+    .chart-labels span {
+      align-self: flex-start;
+    }
+
+    .daily-chart {
+      height: 180px;
+      background: #f7f7fd;
+      border-radius: 12px;
+      position: relative;
+      display: flex;
+      align-items: flex-end;
+      justify-content: center;
+      gap: 120px;
+      padding-bottom: 20px;
+    }
+
+    .bar {
+      width: 30px;
+      border-radius: 12px 12px 8px 8px;
+      background: #e2e6f6;
+      height: 40px;
+    }
+
+    .bar.red {
+      background: var(--red);
+      height: 140px;
+    }
+
+    .axis-labels {
+      position: absolute;
+      bottom: 10px;
+      left: 0;
+      right: 0;
+      display: flex;
+      justify-content: center;
+      gap: 120px;
+      font-size: 11px;
+      color: #8c92a4;
+    }
+
+    .y-axis {
+      position: absolute;
+      left: 12px;
+      top: 14px;
+      bottom: 40px;
+      display: flex;
+      flex-direction: column;
+      justify-content: space-between;
+      font-size: 10px;
+      color: #a2a7b6;
+    }
+
+    .donut {
+      width: 120px;
+      height: 120px;
+      border-radius: 50%;
+      background: conic-gradient(var(--blue) 0 100%, #e7ecff 0 100%);
+      display: grid;
+      place-items: center;
+      margin: 22px auto;
+    }
+
+    .donut::after {
+      content: "";
+      width: 60px;
+      height: 60px;
+      border-radius: 50%;
+      background: var(--card);
+    }
+
+    .center-text {
+      text-align: center;
+      font-size: 13px;
+      color: #6f7381;
+    }
+
+    .category {
+      display: flex;
+      align-items: center;
+      justify-content: space-between;
+      margin-top: 16px;
+      font-size: 12px;
+      color: #6f7381;
+    }
+
+    .legend {
+      display: flex;
+      align-items: center;
+      gap: 8px;
+    }
+
+    .dot-blue {
+      width: 8px;
+      height: 8px;
+      border-radius: 50%;
+      background: var(--blue);
+    }
+
+    .details {
+      margin-top: 12px;
+      font-size: 12px;
+      color: #6f7381;
+    }
+
+    .gastos-title {
+      text-align: center;
+      font-weight: 600;
+      font-size: 14px;
+    }
+  </style>
+</head>
+<body>
+  <header class="topbar">
+    <div class="logo">Fink.AI</div>
+    <div class="avatar" aria-hidden="true">
+      <svg viewBox="0 0 24 24" role="img">
+        <path d="M12 12a4 4 0 1 0-4-4 4 4 0 0 0 4 4zm0 2c-4.41 0-8 2-8 4v2h16v-2c0-2-3.59-4-8-4z" />
+      </svg>
+    </div>
+  </header>
+
+  <nav class="tabs">
+    <span class="active">Visão Geral</span>
+    <span>Transações</span>
+    <span>Minhas Categorias</span>
+    <span>Agenda</span>
+    <span>Open Finance</span>
+    <span>Metas</span>
+    <span>Métodos Financeiros</span>
+  </nav>
+
+  <main class="container">
+    <section class="stack">
+      <div class="card">
+        <div class="period-header">
+          <div class="period-title">
+            <div class="icon-circle">
+              <svg viewBox="0 0 24 24" role="img">
+                <path d="M12 1a11 11 0 1 0 11 11A11 11 0 0 0 12 1zm1 17h-2v-2h2zm1.45-6.05L13 12.67V15h-2v-3l2.05-1.15a2 2 0 1 0-3.05-1.74H8a4 4 0 1 1 6.45 3.84z" />
+              </svg>
+            </div>
+            <div>
+              <h3>Resultados do Período</h3>
+              <div class="muted">1 fev. - 28 fev.</div>
+            </div>
+          </div>
+          <div class="muted">📅</div>
+        </div>
+        <div class="metric negative">-R$ 24,30</div>
+        <div class="muted" style="margin-top: 12px;">Últimas Transações</div>
+        <div class="row">
+          <span>padaria</span>
+          <span>R$ 24,30</span>
+        </div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <h3>Entradas</h3>
+          <span class="chip blue">Receitas</span>
+        </div>
+        <div class="metric" style="color:#2a66ff;">R$ 0,00</div>
+      </div>
+
+      <div class="card">
+        <div style="display:flex; align-items:center; justify-content:space-between;">
+          <h3>Saídas</h3>
+          <span class="chip red">Gastos</span>
+        </div>
+        <div class="metric" style="color: var(--red);">R$ 24,30</div>
+      </div>
+    </section>
+
+    <section class="stack">
+      <div class="card">
+        <h3>Evolução do Saldo no Período</h3>
+        <div class="chart">
+          <div class="chart-lines">
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+            <span></span>
+          </div>
+          <div class="chart-labels">
+            <span>-R$ 14,30</span>
+            <span>-R$ 20,00</span>
+            <span>-R$ 26,67</span>
+            <span>-R$ 33,33</span>
+            <span>-R$ 34,30</span>
+          </div>
+          <div class="dot"></div>
+        </div>
+      </div>
+
+      <div class="card">
+        <h3>Movimentação Diária (Entradas e Saídas)</h3>
+        <div class="daily-chart">
+          <div class="y-axis">
+            <span>R$ 25</span>
+            <span>R$ 20</span>
+            <span>R$ 15</span>
+            <span>R$ 10</span>
+            <span>R$ 5</span>
+            <span>R$ 0</span>
+          </div>
+          <div class="bar"></div>
+          <div class="bar red"></div>
+          <div class="axis-labels">
+            <span>Entradas</span>
+            <span>Saídas</span>
+          </div>
+        </div>
+      </div>
+    </section>
+
+    <section>
+      <div class="card" style="height: 100%;">
+        <div class="gastos-title">Gastos</div>
+        <div class="donut"></div>
+        <div class="center-text">Total pago<br /><strong style="color:#111; font-size:14px;">R$ 24,30</strong></div>
+        <div class="details">
+          <div style="font-weight:600; color:#3a3a3a; margin-bottom:8px;">Detalhes por Categoria</div>
+          <div class="category">
+            <div class="legend">
+              <span class="dot-blue"></span>
+              <span>Alimentação</span>
+            </div>
+            <div>R$ 24,30&nbsp;&nbsp;100.0%</div>
+          </div>
+        </div>
+      </div>
+    </section>
+  </main>
+</body>
+</html>
